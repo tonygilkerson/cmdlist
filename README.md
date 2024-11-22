@@ -1,2 +1,5 @@
-# wslctl
-Workstation Control
+# wsctl
+
+Workstation Control CLI
+
+
