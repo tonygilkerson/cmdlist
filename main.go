@@ -6,50 +6,52 @@ import (
 	"os"
 	"os/exec"
 	"strings"
-	"time"
+	// "time"
 
 	"github.com/charmbracelet/huh"
-	"github.com/charmbracelet/huh/spinner"
-	"github.com/charmbracelet/lipgloss"
+	// "github.com/charmbracelet/huh/spinner"
+	// "github.com/charmbracelet/lipgloss"
 	// xstrings "github.com/charmbracelet/x/exp/strings"
 )
 
-type GcloudCommand struct {
-	Group string
-	Workstation  string
-	Project string
-	Cluster string
-	Config string
-	Region string
-	Account string
+type Action struct {
+	Command []string
+	Args    []string
 }
 
 func main() {
 
-	gcommands := map[string]GcloudCommand{
-		"auth list": {Group: "auth", Workstation: ""},
-		"ws2": {Group: "workstations", Workstation: "cws2"},
-		"ws3": {Group: "workstations", Workstation: "cws3"},
+	actions := map[string]Action{
+		"nodes": {
+			Command: []string{"kubectl"},
+			Args:    []string{"get", "nodes"},
+		},
+		"pods": {
+			Command: []string{"kubectl"},
+			Args:    []string{"get", "pods"},
+		},
+		"lstest": {
+			Command: []string{"ls"},
+			Args:    []string{"-l"},
+		},
 	}
 
-	var itemName string
-	var command string
+	var actionKey string
 
 	form := huh.NewForm(
 
 		huh.NewGroup(
 			huh.NewSelect[string]().
-				Options(huh.NewOptions("auth list","ws2","ws3","ws4")...).
+				Options(huh.NewOptions("nodes", "pods", "ls")...).
 				Title("Choose an item:").
-				Value(&itemName),
+				Value(&actionKey),
 		),
-		huh.NewGroup(
-			huh.NewSelect[string]().
-				Options(huh.NewOptions("start","stop","ssh")...).
-				Title("Choose an action for " + itemName + ":").
-				Value(&command),
-		),
-
+		// huh.NewGroup(
+		// 	huh.NewSelect[string]().
+		// 		Options(huh.NewOptions("start", "stop", "ssh")...).
+		// 		Title("Choose an action for "+actionKey+":").
+		// 		Value(&command),
+		// ),
 	)
 
 	err := form.Run()
@@ -59,55 +61,40 @@ func main() {
 		os.Exit(1)
 	}
 
-	prepareCmd := func() {
-		time.Sleep(1 * time.Second)
-	}
+	// prepareCmd := func() {
+	// 	time.Sleep(800 * time.Microsecond)
+	// }
 
-	_ = spinner.New().Title("Preparing your command...").Action(prepareCmd).Run()
+	// _ = spinner.New().Title("Preparing your command...").Action(prepareCmd).Run()
 
-	// Print order summary.
 	{
-		gcloudcmdExpanded := fmt.Sprintf("gcloud %s %s",gcommands[itemName].Group,command)
+		a := append(actions[actionKey].Command, actions[actionKey].Args...)
+		fmt.Printf("command: %v\n", a)
+		cmd := exec.Command(a[0], a[1:]...)
 
-		var sb strings.Builder
-		keyword := func(s string) string {
-			return lipgloss.NewStyle().Foreground(lipgloss.Color("212")).Render(s)
-		}
-		fmt.Fprintf(&sb,
-			"%s\n\n %s",
-			lipgloss.NewStyle().Bold(true).Render("GCLOUD COMMAND"),
-			keyword(gcloudcmdExpanded),
-		)
+		stdout := new(strings.Builder)
+		stderr := new(strings.Builder)
+		cmd.Stdout = stdout
+		cmd.Stderr = stderr
+		
+		//Inherit the current process's environment
+		cmd.Env = os.Environ()
+		
+		err := cmd.Run()
 
-		name := itemName
-		if name != "" {
-			name = ", " + name
-		}
-		fmt.Fprintf(&sb, "\n\nOk for? %s", name)
-
-
-		fmt.Println(
-			lipgloss.NewStyle().
-				Width(40).
-				BorderStyle(lipgloss.RoundedBorder()).
-				BorderForeground(lipgloss.Color("63")).
-				Padding(1, 2).
-				Render(sb.String()),
-		)
-
-
-
-		cmd := exec.Command("/Users/tgilkerson/google-cloud-sdk/bin/gcloud/" + gcloudcmdExpanded) 
-
-		output, err := cmd.Output()
+		// output, err := cmd.Output()
 		if err != nil {
 			fmt.Println("Error:", err)
 		} else {
-			fmt.Println(string(output))
+
+			// fmt.Println(string(output))
+			fmt.Println(stderr.String())
+			fmt.Println(stdout.String())
 		}
+
 	}
 }
 
-func getGcloudCommandOptions(){
+func getCommandOptions() {
 
 }
