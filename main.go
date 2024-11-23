@@ -3,9 +3,11 @@ package main
 import (
 	// "errors"
 	"fmt"
+	// "maps"
 	"os"
 	"os/exec"
 	"strings"
+
 	// "time"
 
 	"github.com/charmbracelet/huh"
@@ -30,10 +32,20 @@ func main() {
 			Command: []string{"kubectl"},
 			Args:    []string{"get", "pods"},
 		},
+		"node \twide": {
+			Command: []string{"kubectl"},
+			Args:    []string{"get", "nodes", "-owide"},
+		},
 		"lstest": {
 			Command: []string{"ls"},
 			Args:    []string{"-l"},
 		},
+	}
+
+	// Make a slice of strings from the map keys
+	actionKeys := make([]string, 0, len(actions)) // Create a slice with initial capacity
+	for key := range actions {
+		actionKeys = append(actionKeys, key)
 	}
 
 	var actionKey string
@@ -42,7 +54,8 @@ func main() {
 
 		huh.NewGroup(
 			huh.NewSelect[string]().
-				Options(huh.NewOptions("nodes", "pods", "ls")...).
+				// Options(huh.NewOptions("nodes", "pods", "ls")...).
+				Options(huh.NewOptions(actionKeys...)...).
 				Title("Choose an item:").
 				Value(&actionKey),
 		),
