@@ -1,0 +1,10 @@
+hi:
+  command:
+  - echo
+  args:
+  - Hi Tony!
+ll:
+  command:
+  - ls
+  args:
+  - -ltr
