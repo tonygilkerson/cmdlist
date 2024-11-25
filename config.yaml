@@ -1,11 +1,55 @@
-ll:
+xx ls:
   command:
   - ls
   args:
   - -ltr
-hi:
+xx hi:
   command:
   - echo
   args:
   - Hi Tony!
-
+ws corelight   dev   admin-vm ssh:
+  command: [ "gcloud" ]
+  args: [ "compute", "ssh", "vm-gke-admin-console", "--zone=us-central1-b", "--tunnel-through-iap", "--project=afrl-il4-dev-corelight-8hjs" ]
+ws ntahub      prod  cws      start:
+  command: [ "gcloud" ]
+  args: [ "workstations", "start", "cws nonprod-ntahub-gke-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-ntahub", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws ntahub      prod  cws      ssh:
+  command: [ "gcloud" ]
+  args: [ "workstations", "ssh", "cws nonprod-ntahub-gke-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-ntahub", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws hub         dev   cws      start:
+  command: [ "gcloud" ]
+  args: [ "workstations", "start", "cws dev-gke-gcp-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-dev", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws hub         dev   cws      ssh:
+  command: [ "gcloud" ]
+  args: [ "workstations", "ssh", "cws dev-gke-gcp-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-dev", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws team        rch   cws      start:
+  command: [ "gcloud" ]
+  args: [ "workstations", "start", "cws team-gke-gcp-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-team", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws team        rch   cws      ssh:
+  command: [ "gcloud" ]
+  args: [ "workstations", "ssh", "cws team-gke-gcp-gilkerson-ext", "--project=afrl-il4-hub-ops-m2bl", "--cluster=il4-aw-ops-cws-cluster", "--config=ops-wolfi-team", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws hub         prod  cws      start: 
+  command: [ "gcloud" ]
+  args: [ "workstations", "start", "cws-tony-gilkerson-ext", "--project=afrl-il4-prod-cws-udwe", "--cluster=il4-cws-cluster", "--config=tf-wolfi", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws hub         prod  cws      ssh:
+  command: [ "gcloud" ]
+  args: [ "workstations", "ssh", "cws-tony-gilkerson-ext", "--project=afrl-il4-prod-cws-udwe", "--cluster=il4-cws-cluster", "--config=tf-wolfi", "--region=us-central1" ]
+ws hub         prod  cws      open: 
+  command: [ "open" ] 
+  args: [ "https://80-cws-tony-gilkerson-ext.cluster-uiz7lwpy35gd6xmn3dxolrdhey.cloudworkstations.dev/?authuser=0" ]
+ws ops         vdi   cws      start:
+  command: [ "gcloud" ]
+  args: [ "workstations", "start", "cws-vdi-tony-gilkerson-ext", "--project=afrl-ops-org-ops-vdi-jpr8", "--cluster=sre-cws-cluster", "--config=sre-cws-config-wolfi", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws ops         vdi   cws      ssh:
+  command: [ "gcloud" ]
+  args: [ "workstations", "ssh", "cws-vdi-tony-gilkerson-ext", "--project=afrl-ops-org-ops-vdi-jpr8", "--cluster=sre-cws-cluster", "--config=sre-cws-config-wolfi", "--region=us-central1", "--account=tony.gilkerson.ext@afresearchlab.com" ]
+ws ops         vdi   ui       open:
+  command: [ "open" ]
+  args: [ "https://80-cws-vdi-tony-gilkerson-ext.cluster-wsjmz7e3encl4tmjfeswircom4.cloudworkstations.dev/?authuser=0" ]
+ws tgilkerson  rch   admin-vm ssh:
+  command: [ "gcloud" ]
+  args: [ "compute", "ssh", "vm-gke-admin-console", "--zone us-central1-b", "--tunnel-through-iap", "--project=afrl-il4-rch-tgilkerson-a247" ]
+ws tgilkerson  rch   client-a ssh:
+  command: [ "gcloud" ]
+  args: [ "compute", "ssh", "afrl-il4-rch-tgilkerson-a247-client-a", "--zone=us-central1-a", "--tunnel-through-iap", "--project=afrl-il4-rch-tgilkerson-a247" ]

@@ -1,23 +1,14 @@
 package main
 
 import (
-	// "errors"
 	"fmt"
-	"log"
-
-	// "maps"
 	"os"
 	"os/exec"
+	"sort"
 	"strings"
-
-	// "time"
 
 	"github.com/charmbracelet/huh"
 	"gopkg.in/yaml.v2"
-	// "gopkg.in/yaml.v2"
-	// "github.com/charmbracelet/huh/spinner"
-	// "github.com/charmbracelet/lipgloss"
-	// xstrings "github.com/charmbracelet/x/exp/strings"
 )
 
 type Action struct {
@@ -29,56 +20,23 @@ func main() {
 
 	// Read the YAML file
 	data, err := os.ReadFile("config.yaml")
-	if err != nil {
-		panic(err)
-	}
-
+	must(err)
 
 	// Unmarshal the YAML into a map
 	var actionMap map[string]Action
 	err = yaml.Unmarshal(data, &actionMap)
-	if err != nil {
-		panic(err)
-	}
-
-	// actionMap := map[string]Action{
-	// 	"nodes": {
-	// 		Command: []string{"kubectl"},
-	// 		Args:    []string{"get", "nodes"},
-	// 	},
-	// 	"pods": {
-	// 		Command: []string{"kubectl"},
-	// 		Args:    []string{"get", "pods"},
-	// 	},
-	// 	"node \twide": {
-	// 		Command: []string{"kubectl"},
-	// 		Args:    []string{"get", "nodes", "-owide"},
-	// 	},
-	// 	"lstest": {
-	// 		Command: []string{"ls"},
-	// 		Args:    []string{"-l"},
-	// 	},
-	// }
-
-
-
+	must(err)
 
 	data, err = yaml.Marshal(actionMap)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	err = os.WriteFile("configtest.yaml", data, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
+	must(err)
 
 	// Make a slice of strings from the map keys
 	actionKeys := make([]string, 0, len(actionMap)) // Create a slice with initial capacity
 	for key := range actionMap {
 		actionKeys = append(actionKeys, key)
 	}
-
+  sort.Strings(actionKeys)
+	
 	var actionKey string
 
 	form := huh.NewForm(
@@ -97,19 +55,8 @@ func main() {
 		// 		Value(&command),
 		// ),
 	)
-
 	err = form.Run()
-
-	if err != nil {
-		fmt.Println("Uh oh:", err)
-		os.Exit(1)
-	}
-
-	// prepareCmd := func() {
-	// 	time.Sleep(800 * time.Microsecond)
-	// }
-
-	// _ = spinner.New().Title("Preparing your command...").Action(prepareCmd).Run()
+	must(err)
 
 	{
 		a := append(actionMap[actionKey].Command, actionMap[actionKey].Args...)
@@ -139,6 +86,8 @@ func main() {
 	}
 }
 
-func getCommandOptions() {
-
+func must(err error) {
+	if err != nil {
+		panic(err)
+	}
 }
