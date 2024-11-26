@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/exec"
 	"sort"
-	"strings"
 
 	"github.com/charmbracelet/huh"
 	"gopkg.in/yaml.v2"
@@ -35,8 +34,8 @@ func main() {
 	for key := range actionMap {
 		actionKeys = append(actionKeys, key)
 	}
-  sort.Strings(actionKeys)
-	
+	sort.Strings(actionKeys)
+
 	var actionKey string
 
 	form := huh.NewForm(
@@ -45,7 +44,7 @@ func main() {
 			huh.NewSelect[string]().
 				// Options(huh.NewOptions("nodes", "pods", "ls")...).
 				Options(huh.NewOptions(actionKeys...)...).
-				Title("Choose an item:").
+				Title("Choose an item:").Height(25).
 				Value(&actionKey),
 		),
 		// huh.NewGroup(
@@ -63,25 +62,15 @@ func main() {
 		fmt.Printf("command: %v\n", a)
 		cmd := exec.Command(a[0], a[1:]...)
 
-		stdout := new(strings.Builder)
-		stderr := new(strings.Builder)
-		cmd.Stdout = stdout
-		cmd.Stderr = stderr
+		// Redirect command's stdout/in/error to the current process's
+		cmd.Stdout = os.Stdout
+		cmd.Stderr = os.Stderr
+		cmd.Stdin = os.Stdin
 
 		//Inherit the current process's environment
 		cmd.Env = os.Environ()
 
 		err = cmd.Run()
-
-		// output, err := cmd.Output()
-		if err != nil {
-			fmt.Println("Error:", err)
-		} else {
-
-			// fmt.Println(string(output))
-			fmt.Println(stderr.String())
-			fmt.Println(stdout.String())
-		}
 
 	}
 }
