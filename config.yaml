@@ -1,13 +1,8 @@
-xx ls:
+aaa this is a test config:
   command:
   - ls
   args:
   - -ltr
-xx hi:
-  command:
-  - echo
-  args:
-  - Hi Tony!
 ws corelight   dev   admin-vm ssh:
   command: [ "gcloud" ]
   args: [ "compute", "ssh", "vm-gke-admin-console", "--zone=us-central1-b", "--tunnel-through-iap", "--project=afrl-il4-dev-corelight-8hjs" ]
@@ -53,6 +48,6 @@ ws tgilkerson  rch   admin-vm ssh:
 ws tgilkerson  rch   client-a ssh:
   command: [ "gcloud" ]
   args: [ "compute", "ssh", "afrl-il4-rch-tgilkerson-a247-client-a", "--zone=us-central1-a", "--tunnel-through-iap", "--project=afrl-il4-rch-tgilkerson-a247" ]
-ws aegsndbx    rch   admin-vm ssh:
-  command: [ "gcloud" ]
-  args: [ "compute", "ssh", "vm-gke-admin-console", "--zone=us-central1-b", "--tunnel-through-iap", "--project=afrl-il4-rch-aegsndbx-a347" ]
+exit:
+  command: [ "echo" ]
+  args: [ "bye." ]

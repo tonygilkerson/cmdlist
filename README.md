@@ -1,5 +1,4 @@
-# wsctl
+# cmdlist
 
-Workstation Control CLI
-
+I simple command list picker.
 

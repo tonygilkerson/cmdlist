@@ -1,4 +1,4 @@
-module github.com/tonygilkerson/wsctl
+module github.com/tonygilkerson/cmdlist
 
 go 1.23.3
 
