@@ -36,8 +36,10 @@ func main() {
 	// Read flags
 	//
 	var filters Filters
-	
 	flag.Var(&filters, "f", "Command filter, must contain")
+	
+	dryRunPtr := flag.Bool("dry-run", false, "Dry run mode")
+	
 	flag.Parse()
 
 
@@ -125,7 +127,6 @@ func main() {
 
 	{
 		a := append(commandMap[commandKey].Command, commandMap[commandKey].Args...)
-		fmt.Printf("command: %v\n", a)
 		cmd := exec.Command(a[0], a[1:]...)
 
 		// Redirect command's stdout/in/error to the current process's
@@ -136,7 +137,11 @@ func main() {
 		//Inherit the current process's environment
 		cmd.Env = os.Environ()
 
-		err = cmd.Run()
+		if *dryRunPtr {
+			fmt.Println(cmd.String())
+		} else {
+			err = cmd.Run()
+		}
 
 	}
 }
