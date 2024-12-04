@@ -99,6 +99,10 @@ func main() {
 		}
 	}
 
+	title := "Choose a command:"
+	if *dryRunPtr {
+		title = "Choose a command (dry-run):"
+	}
 
 	sort.Strings(commandKeys)
 
@@ -110,8 +114,8 @@ func main() {
 			huh.NewSelect[string]().
 				// Options(huh.NewOptions("nodes", "pods", "ls")...).
 				Options(huh.NewOptions(commandKeys...)...).
-				Title("Using config:  " + configFile).
-				Description("\nChoose a command:").
+				Title("Using config:  " + configFile + "\n").
+				Description(title).
 				Height(20).
 				Value(&commandKey),
 		),
