@@ -1,6 +1,6 @@
 module github.com/tonygilkerson/cmdlist
 
-go 1.23.3
+go 1.22.9
 
 require (
 	github.com/charmbracelet/huh v0.6.0
