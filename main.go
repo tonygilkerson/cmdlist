@@ -48,14 +48,14 @@ func main() {
 	//
 
 	// First check if config file is in current dir
-	configFile := "config.yaml"
+	configFile := "cmdlist-config.yaml"
 	_, err := os.Stat(configFile)
 	if os.IsNotExist(err) {
 		// check if config file is in well know location under the home folder
 		usr, err := user.Current()
 		must(err)
 
-		configFile = usr.HomeDir + "/.config/cmdlist/config.yaml"
+		configFile = usr.HomeDir + "/cmdlist-config.yaml"
 
 		_, err = os.Stat(configFile)
 		if os.IsNotExist(err) {
